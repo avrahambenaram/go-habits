@@ -1,0 +1,21 @@
+{{ block "header" . }}
+<header
+  class="w-full h-[10%] bg-slate-300 px-3 flex justify-between items-center"
+>
+  <div class="gap-2 flex items-center">
+    <img
+      src="assets/icon.svg"
+      alt="Caderno ícone"
+      class="h-2/3"
+    >
+    <h2>Caderno digital</h2>
+  </div>
+  <nav class="gap-2 flex items-center">
+    <a class="text-emerald-600 hover:text-emerald-800" href="/">Início</a>
+    <a class="text-emerald-600 hover:text-emerald-800" href="/documents">Documentos</a>
+    <a class="text-emerald-600 hover:text-emerald-800" href="/about">Sobre</a>
+    <span class="w-[1px] h-2 bg-black"></span>
+    <a class="text-emerald-600 hover:text-emerald-800" href="/login">Login</a>
+  </nav>
+</header>
+{{ end }}
