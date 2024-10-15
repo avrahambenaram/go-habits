@@ -1,0 +1,65 @@
+{{ block "create-habit" . }}
+<dialog
+  class="bg-black/75 w-screen h-screen open:flex justify-center items-center"
+  id="create-habit"
+  >
+  <div class="w-3/12 rounded-md bg-zinc-900 p-4 flex flex-col">
+    <button
+      onclick="document.getElementById('create-habit').close()"
+      class="self-end"
+      >
+      <i
+        data-feather="x"
+        class="text-2xl text-zinc-400 hover:text-zinc-200 transition"
+        ></i>
+    </button>
+    <form class="flex flex-col gap-2">
+      <h3 class="text-white text-2xl font-extrabold mb-2">Criar hábito</h3>
+      <label>
+        <span class="text-white">Qual seu comprometimento?</span>
+        <input
+          name="title"
+          placeholder="Exercícios, dormir bem, etc..."
+          class="bg-zinc-800 rounded p-2 w-full"
+          >
+      </label>
+      <span class="text-white">Qual a recorrência?</span>
+      <label class="flex items-center text-white gap-1">
+        <input type="checkbox" name="week_days" value="0">
+        Domingo
+      </label>
+      <label class="flex items-center text-white gap-1">
+        <input type="checkbox" name="week_days" value="1">
+        Segunda
+      </label>
+      <label class="flex items-center text-white gap-1">
+        <input type="checkbox" name="week_days" value="2">
+        Terça-feira
+      </label>
+      <label class="flex items-center text-white gap-1">
+        <input type="checkbox" name="week_days" value="3">
+        Quarta-feira
+      </label>
+      <label class="flex items-center text-white gap-1">
+        <input type="checkbox" name="week_days" value="4">
+        Quinta-feira
+      </label>
+      <label class="flex items-center text-white gap-1">
+        <input type="checkbox" name="week_days" value="5">
+        Sexta-feira
+      </label>
+      <label class="flex items-center text-white gap-1">
+        <input type="checkbox" name="week_days" value="6">
+        Sábado
+      </label>
+      <button
+        type="submit"
+        class="bg-green-600 hover:bg-green-800 transition rounded w-full mt-2 text-white py-3 gap-2 flex justify-center items-center"
+        >
+        <i data-feather="check" class="text-md"></i>
+        <span>Confirmar</span>
+      </button>
+    </form>
+  </div>
+</dialog>
+{{ end }}
