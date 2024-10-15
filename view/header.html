@@ -1,21 +1,15 @@
 {{ block "header" . }}
 <header
-  class="w-full h-[10%] bg-slate-300 px-3 flex justify-between items-center"
+  class="w-1/2 flex justify-between items-center"
 >
-  <div class="gap-2 flex items-center">
-    <img
-      src="assets/icon.svg"
-      alt="Caderno ícone"
-      class="h-2/3"
-    >
-    <h2>Caderno digital</h2>
-  </div>
-  <nav class="gap-2 flex items-center">
-    <a class="text-emerald-600 hover:text-emerald-800" href="/">Início</a>
-    <a class="text-emerald-600 hover:text-emerald-800" href="/documents">Documentos</a>
-    <a class="text-emerald-600 hover:text-emerald-800" href="/about">Sobre</a>
-    <span class="w-[1px] h-2 bg-black"></span>
-    <a class="text-emerald-600 hover:text-emerald-800" href="/login">Login</a>
-  </nav>
+  <img
+    src="assets/icon.svg"
+    alt="Habits ícone"
+    class="h-14"
+  >
+  <button class="border-x-violet-500 border-x hover:border-x-violet-700 transition rounded p-4 flex items-center gap-2 group">
+    <i data-feather="plus" class="text-violet-500 group-hover:text-violet-700 transition"></i>
+    <span class="text-white">Novo hábito</span>
+  </button>
 </header>
 {{ end }}
