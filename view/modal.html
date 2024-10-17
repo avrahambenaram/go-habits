@@ -13,43 +13,47 @@
         class="text-2xl text-zinc-400 hover:text-zinc-200 transition"
         ></i>
     </button>
-    <form class="flex flex-col gap-2">
+    <form
+      class="flex flex-col gap-2"
+      method="POST"
+      action="/habit"
+      >
       <h3 class="text-white text-2xl font-extrabold mb-2">Criar hábito</h3>
       <label>
         <span class="text-white">Qual seu comprometimento?</span>
         <input
           name="title"
           placeholder="Exercícios, dormir bem, etc..."
-          class="bg-zinc-800 rounded p-2 w-full"
+          class="text-white bg-zinc-800 rounded p-2 w-full"
           >
       </label>
       <span class="text-white">Qual a recorrência?</span>
       <label class="flex items-center text-white gap-1">
-        <input type="checkbox" name="week_days" value="0">
+        <input type="checkbox" name="week_days" value="1">
         Domingo
       </label>
       <label class="flex items-center text-white gap-1">
-        <input type="checkbox" name="week_days" value="1">
+        <input type="checkbox" name="week_days" value="2">
         Segunda
       </label>
       <label class="flex items-center text-white gap-1">
-        <input type="checkbox" name="week_days" value="2">
+        <input type="checkbox" name="week_days" value="4">
         Terça-feira
       </label>
       <label class="flex items-center text-white gap-1">
-        <input type="checkbox" name="week_days" value="3">
+        <input type="checkbox" name="week_days" value="8">
         Quarta-feira
       </label>
       <label class="flex items-center text-white gap-1">
-        <input type="checkbox" name="week_days" value="4">
+        <input type="checkbox" name="week_days" value="16">
         Quinta-feira
       </label>
       <label class="flex items-center text-white gap-1">
-        <input type="checkbox" name="week_days" value="5">
+        <input type="checkbox" name="week_days" value="32">
         Sexta-feira
       </label>
       <label class="flex items-center text-white gap-1">
-        <input type="checkbox" name="week_days" value="6">
+        <input type="checkbox" name="week_days" value="64">
         Sábado
       </label>
       <button
