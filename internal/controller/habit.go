@@ -35,9 +35,14 @@ func (c HabitController) Create(w http.ResponseWriter, r *http.Request) {
 	weekDays := 0
 	for _, day := range weekDaysForm {
 		dayInt, err := strconv.Atoi(day)
-		if err == nil {
-			weekDays += dayInt
+		if err != nil {
+			break
 		}
+		if dayInt < 0 || dayInt > 6 {
+			break
+		}
+		dayMask := 1 << dayInt
+		weekDays |= dayMask
 	}
 	habit := entity.Habit{
 		Title: title,
