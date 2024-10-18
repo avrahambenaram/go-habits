@@ -21,7 +21,7 @@ func main() {
 	})
 
 	habitModel := &model.HabitModel{}
-	controller.NewHabitController(mux, habitModel)
+	controller.NewHabitController(mux, habitModel, tmpls)
 
 	log.Println("Server is running on port 3000")
 	log.Fatal(http.ListenAndServe(":3000", mux))

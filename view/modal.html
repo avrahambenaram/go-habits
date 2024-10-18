@@ -15,8 +15,10 @@
     </button>
     <form
       class="flex flex-col gap-2"
-      method="POST"
-      action="/habit"
+      hx-post="/habit"
+      hx-target="#result"
+      hx-swap="innerHTML"
+      hx-on:htmx:after-request="resetForm(event)"
       >
       <h3 class="text-white text-2xl font-extrabold mb-2">Criar hábito</h3>
       <label>
@@ -64,6 +66,13 @@
         <span>Confirmar</span>
       </button>
     </form>
+    <div id="result" class="mt-2">
+    </div>
   </div>
+  <script>
+    function resetForm(event) {
+      event.target.reset();
+    }
+  </script>
 </dialog>
 {{ end }}

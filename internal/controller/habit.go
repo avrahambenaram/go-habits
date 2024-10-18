@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -10,12 +11,14 @@ import (
 
 type HabitController struct {
 	server     *http.ServeMux
+	tmpls      *template.Template
 	habitModel *model.HabitModel
 }
 
-func NewHabitController(server *http.ServeMux, habitModel *model.HabitModel) HabitController {
+func NewHabitController(server *http.ServeMux, habitModel *model.HabitModel, tmpls *template.Template) HabitController {
 	habitController := HabitController{
 		server,
+		tmpls,
 		habitModel,
 	}
 	server.HandleFunc("POST /habit", habitController.Create)
@@ -23,7 +26,7 @@ func NewHabitController(server *http.ServeMux, habitModel *model.HabitModel) Hab
 	return habitController
 }
 
-func (c HabitController) Create(w http.ResponseWriter, r *http.Request) {
+func (c *HabitController) Create(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Unable to parse form", http.StatusBadRequest)
@@ -51,9 +54,10 @@ func (c HabitController) Create(w http.ResponseWriter, r *http.Request) {
 
 	errCreate := c.habitModel.Create(habit)
 	if errCreate != nil {
-		w.Write([]byte("Erro"))
+		w.WriteHeader(400)
+		c.tmpls.ExecuteTemplate(w, "result-fail", "Erro ao cadastrar o hábito")
 		return
 	}
 
-	w.Write([]byte("Teste"))
+	c.tmpls.ExecuteTemplate(w, "result-success", "Cadastrado com sucesso")
 }
