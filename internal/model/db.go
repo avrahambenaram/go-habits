@@ -15,5 +15,7 @@ func init() {
 	}
 
 	db.AutoMigrate(&entity.Habit{})
+	db.AutoMigrate(&entity.Day{})
+	db.AutoMigrate(&entity.DayHabit{})
 	DB = db
 }
