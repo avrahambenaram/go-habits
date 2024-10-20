@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/avrahambenaram/go-habits/internal/model"
 )
@@ -27,8 +29,37 @@ func NewDayController(server *http.ServeMux, dayModel *model.DayModel, tmpls *te
 		dayModel,
 	}
 	server.HandleFunc("GET /table", dayController.Table)
+	server.HandleFunc("GET /day/habits/{ID}", dayController.DayHabits)
 
 	return dayController
+}
+
+func (c *DayController) DayHabits(w http.ResponseWriter, r *http.Request) {
+	idStr := r.PathValue("ID")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Id deve ser um número inteiro", http.StatusForbidden)
+		return
+	}
+
+	items, err1 := c.dayModel.FindHabitsByDayID(id)
+	if err1 != nil {
+		http.Error(w, "Id não encontrado", http.StatusNotFound)
+		return
+	}
+
+	now := time.Now()
+	editingDay, _ := c.dayModel.FindById(id)
+	editingDate := editingDay.Date
+	isEditable := false
+	if editingDate.Year() == now.Year() && editingDate.Month() == now.Month() && editingDate.Day() == now.Day() {
+		isEditable = true
+	}
+
+	c.tmpls.ExecuteTemplate(w, "day-habits", map[string]interface{}{
+		"HabitItems": items,
+		"Editable":   isEditable,
+	})
 }
 
 func (c *DayController) Table(w http.ResponseWriter, r *http.Request) {

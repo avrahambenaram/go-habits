@@ -2,6 +2,10 @@
 <dialog
   class="bg-black/75 w-screen h-screen open:flex justify-center items-center"
   id="btn-{{ .ID }}"
+  hx-trigger="intersect"
+  hx-get="/day/habits/{{ .ID }}"
+  hx-swap="innerHTML"
+  hx-target="#day-habits-{{ .ID }}"
   >
   <div class="w-3/12 rounded-md bg-zinc-900 p-4 flex flex-col">
     <button
@@ -21,6 +25,42 @@
       <div style="width: calc({{ .Points }} * 100%)" class="h-full rounded-md bg-violet-600">
       </div>
     </div>
+    <ul id="day-habits-{{ .ID }}">
+    </ul>
   </div>
 </dialog>
+{{ end }}
+
+{{ define "day-habits" }}
+  {{ if .Editable }}
+    {{ range .HabitItems }}
+      {{ template "day-habit-editable" . }}
+    {{ end }}
+  {{ else }}
+    {{ range .HabitItems }}
+      {{ template "day-habit" . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ define "day-habit-editable" }}
+<label class="flex items-center text-white gap-1">
+  {{ if .Done }}
+    <input type="checkbox" name="day-habits" value="{{ .Habit.ID }}" checked="{{ .Done }}">
+  {{ else }}
+    <input type="checkbox" name="day-habits" value="{{ .Habit.ID }}">
+  {{ end }}
+  {{ .Habit.Title }}
+</label>
+{{ end }}
+
+{{ define "day-habit" }}
+<label class="flex items-center text-white gap-1">
+  {{ if .Done }}
+    <input disabled type="checkbox" name="day-habits" value="{{ .Habit.ID }}" checked="{{ .Done }}">
+  {{ else }}
+    <input disabled type="checkbox" name="day-habits" value="{{ .Habit.ID }}">
+  {{ end }}
+  {{ .Habit.Title }}
+</label>
 {{ end }}

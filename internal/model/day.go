@@ -1,6 +1,8 @@
 package model
 
 import (
+	"errors"
+	"slices"
 	"time"
 
 	"github.com/avrahambenaram/go-habits/internal/entity"
@@ -17,8 +19,51 @@ type TableItem struct {
 }
 type Table []TableItem
 
+type HabitItem struct {
+	Habit entity.Habit
+	Done  bool
+}
+
 func (c *Table) Add(item TableItem) {
 	*c = append(*c, item)
+}
+
+func (c *DayModel) FindById(dayID int) (entity.Day, error) {
+	day := entity.Day{}
+	DB.Where("ID = ?", dayID).Find(&day)
+	if day.Date.Year() == 1 {
+		return day, errors.New("Dia não encontrado")
+	}
+	return day, nil
+}
+
+func (c *DayModel) FindHabitsByDayID(dayID int) ([]HabitItem, error) {
+	items := []HabitItem{}
+	day := entity.Day{}
+	DB.Where("ID = ?", dayID).Find(&day)
+	if day.Date.Year() == 1 {
+		return nil, errors.New("Não há dia com este ID")
+	}
+	dayHabits := []entity.DayHabit{}
+	weekday := uint(day.Date.Weekday())
+	weekdayHabits := c.HabitModel.getHabitsByWeekday(weekday)
+	DB.Where("day_id = ?", day.ID).Find(&dayHabits)
+	for _, weekdayHabit := range weekdayHabits {
+		habitItem := &HabitItem{
+			Habit: weekdayHabit,
+		}
+		isHabitDone := func(habit entity.DayHabit) bool {
+			if weekdayHabit.ID == habit.HabitID {
+				return true
+			}
+			return false
+		}
+		if slices.ContainsFunc(dayHabits, isHabitDone) {
+			habitItem.Done = true
+		}
+		items = append(items, *habitItem)
+	}
+	return items, nil
 }
 
 func (c DayModel) GetTable() Table {
