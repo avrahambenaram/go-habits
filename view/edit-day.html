@@ -1,0 +1,26 @@
+{{ block "edit-day" . }}
+<dialog
+  class="bg-black/75 w-screen h-screen open:flex justify-center items-center"
+  id="btn-{{ .ID }}"
+  >
+  <div class="w-3/12 rounded-md bg-zinc-900 p-4 flex flex-col">
+    <button
+      onclick="document.getElementById('btn-{{ .ID }}').close()"
+      class="self-end"
+      >
+      <i
+        data-feather="x"
+        class="text-2xl text-zinc-400 hover:text-zinc-200 transition"
+        ></i>
+    </button>
+    <p class="text-zinc-400">{{ .Weekday }}</p>
+    <h3 class="text-white text-3xl">{{ .Date }}</h3>
+    <div
+      class="w-full h-3 bg-zinc-700 rounded-md"
+      >
+      <div style="width: calc({{ .Points }} * 100%)" class="h-full rounded-md bg-violet-600">
+      </div>
+    </div>
+  </div>
+</dialog>
+{{ end }}

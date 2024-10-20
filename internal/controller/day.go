@@ -16,7 +16,8 @@ type DayController struct {
 
 type Item struct {
 	model.TableItem
-	Date string
+	Date    string
+	Weekday string
 }
 
 func NewDayController(server *http.ServeMux, dayModel *model.DayModel, tmpls *template.Template) DayController {
@@ -43,9 +44,20 @@ func (c *DayController) Table(w http.ResponseWriter, r *http.Request) {
 func (c DayController) formatItems(dest *[]Item, table model.Table) {
 	for _, tableItem := range table {
 		date := fmt.Sprintf("%02d/%02d", tableItem.Date.Day(), tableItem.Date.Month())
+		weekdays := []string{
+			"Domingo",
+			"Segunda-feira",
+			"Terça-feira",
+			"Quarta-feira",
+			"Quinta-feira",
+			"Sexta-feira",
+			"Sábado",
+		}
+		weekday := weekdays[tableItem.Date.Weekday()]
 		item := Item{
 			tableItem,
 			date,
+			weekday,
 		}
 		*dest = append(*dest, item)
 	}
