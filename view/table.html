@@ -1,6 +1,6 @@
 {{ block "table" . }}
-<div class="w-3/4 flex gap-4">
-  <ul class="flex flex-col gap-1">
+<div class="w-3/4 h-[15.8rem] flex gap-4">
+  <ul class="h-full flex flex-col justify-around">
     {{ template "item-label" "D" }}
     {{ template "item-label" "S" }}
     {{ template "item-label" "T" }}
@@ -9,14 +9,11 @@
     {{ template "item-label" "S" }}
     {{ template "item-label" "S" }}
   </ul>
-  <div>
-    <ul class="flex items-center gap-1">
-      {{ template "block-0" }}
-      {{ template "block-1" }}
-      {{ template "block-2" }}
-      {{ template "block-3" }}
-      {{ template "block-4" }}
-      {{ template "block-5" }}
+  <div class="h-full">
+    <ul class="h-full flex flex-col flex-wrap items-center gap-1">
+      {{ range .Days }}
+        {{ template "block" . }}
+      {{ end }}
     </ul>
   </div>
 </div>
@@ -26,8 +23,25 @@
 <li class="text-zinc-400 text-lg">{{ . }}</li>
 {{ end }}
 
+{{ define "block" }}
+  {{ if gt .Points 0.83 }}
+    {{ template "block-5" . }}
+  {{ else if gt .Points 0.66 }}
+    {{ template "block-4" . }}
+  {{ else if gt .Points 0.5 }}
+    {{ template "block-3" . }}
+  {{ else if gt .Points 0.33 }}
+    {{ template "block-2" . }}
+  {{ else if gt .Points 0.16 }}
+    {{ template "block-1" . }}
+  {{ else }}
+    {{ template "block-0" . }}
+  {{ end }}
+{{ end }}
+
 {{ define "block-0" }}
 <button
+  title="{{ .Date }}"
   class="w-8 h-8 rounded bg-zinc-900 stroke-zinc-800"
   >
 </button>
@@ -35,6 +49,7 @@
 
 {{ define "block-1" }}
 <button
+  title="{{ .Date }}"
   class="w-8 h-8 rounded bg-violet-900 stroke-violet-700"
   >
 </button>
@@ -42,6 +57,7 @@
 
 {{ define "block-2" }}
 <button
+  title="{{ .Date }}"
   class="w-8 h-8 rounded bg-violet-800 stroke-violet-600"
   >
 </button>
@@ -49,6 +65,7 @@
 
 {{ define "block-3" }}
 <button
+  title="{{ .Date }}"
   class="w-8 h-8 rounded bg-violet-700 stroke-violet-500"
   >
 </button>
@@ -56,6 +73,7 @@
 
 {{ define "block-4" }}
 <button
+  title="{{ .Date }}"
   class="w-8 h-8 rounded bg-violet-600 stroke-violet-500"
   >
 </button>
@@ -63,6 +81,7 @@
 
 {{ define "block-5" }}
 <button
+  title="{{ .Date }}"
   class="w-8 h-8 rounded bg-violet-500 stroke-violet-400"
   >
 </button>

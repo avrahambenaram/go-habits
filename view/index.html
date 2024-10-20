@@ -9,9 +9,14 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
   </head>
-  <body class='w-screen h-screen p-0 bg-zinc-950 gap-8 flex flex-col justify-center items-center'>
+  <body
+    class='w-screen h-screen p-0 bg-zinc-950 gap-8 flex flex-col justify-center items-center'
+    hx-get="/table"
+    hx-trigger="load"
+    hx-target="#create-habit"
+    hx-swap="beforebegin"
+    >
     {{ template "header" . }}
-    {{ template "table" . }}
     {{ template "create-habit" . }}
     <script>
       feather.replace();
