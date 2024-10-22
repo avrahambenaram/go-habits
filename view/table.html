@@ -9,8 +9,8 @@
     {{ template "item-label" "S" }}
     {{ template "item-label" "S" }}
   </ul>
-  <div class="h-full">
-    <ul class="h-full flex flex-col flex-wrap items-center gap-1">
+  <div class="w-full h-full">
+    <ul class="w-full h-full overflow-auto flex flex-col flex-wrap items-center gap-1">
       {{ range .Days }}
         {{ template "table-item" . }}
       {{ end }}
