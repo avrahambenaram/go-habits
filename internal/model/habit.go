@@ -17,6 +17,15 @@ func (c HabitModel) Create(habit entity.Habit) error {
 	return nil
 }
 
+func (c HabitModel) FindByID(habitID int) (entity.Habit, error) {
+	habit := entity.Habit{}
+	DB.Where("ID = ?", habitID).Find(&habit)
+	if habit.Title == "" {
+		return habit, errors.New("Hábito não encontrado")
+	}
+	return habit, nil
+}
+
 func (c HabitModel) getHabitsByWeekday(weekday uint) []entity.Habit {
 	weekdaysBits := []uint{1, 2, 4, 8, 16, 32, 64}
 	weekdayBit := weekdaysBits[weekday]

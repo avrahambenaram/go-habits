@@ -7,7 +7,12 @@
   hx-swap="innerHTML"
   hx-target="#day-habits-{{ .ID }}"
   >
-  <div class="w-3/12 rounded-md bg-zinc-900 p-4 flex flex-col">
+  <form
+    class="w-3/12 rounded-md bg-zinc-900 p-4 flex flex-col"
+    hx-target="#block-{{ .ID }}"
+    hx-swap="outerHTML"
+    hx-patch="/day/{{ .ID }}"
+    >
     <button
       onclick="document.getElementById('btn-{{ .ID }}').close()"
       class="self-end"
@@ -27,7 +32,7 @@
     </div>
     <ul id="day-habits-{{ .ID }}">
     </ul>
-  </div>
+  </form>
 </dialog>
 {{ end }}
 

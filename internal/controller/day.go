@@ -30,6 +30,7 @@ func NewDayController(server *http.ServeMux, dayModel *model.DayModel, tmpls *te
 	}
 	server.HandleFunc("GET /table", dayController.Table)
 	server.HandleFunc("GET /day/habits/{ID}", dayController.DayHabits)
+	server.HandleFunc("PATCH /day/{ID}", dayController.UpdateDayHabits)
 
 	return dayController
 }
@@ -74,22 +75,62 @@ func (c *DayController) Table(w http.ResponseWriter, r *http.Request) {
 
 func (c DayController) formatItems(dest *[]Item, table model.Table) {
 	for _, tableItem := range table {
-		date := fmt.Sprintf("%02d/%02d", tableItem.Date.Day(), tableItem.Date.Month())
-		weekdays := []string{
-			"Domingo",
-			"Segunda-feira",
-			"Terça-feira",
-			"Quarta-feira",
-			"Quinta-feira",
-			"Sexta-feira",
-			"Sábado",
-		}
-		weekday := weekdays[tableItem.Date.Weekday()]
-		item := Item{
-			tableItem,
-			date,
-			weekday,
-		}
+		item := c.formatItem(tableItem)
 		*dest = append(*dest, item)
 	}
+}
+
+func (c DayController) formatItem(tableItem model.TableItem) Item {
+	date := fmt.Sprintf("%02d/%02d", tableItem.Date.Day(), tableItem.Date.Month())
+	weekdays := []string{
+		"Domingo",
+		"Segunda-feira",
+		"Terça-feira",
+		"Quarta-feira",
+		"Quinta-feira",
+		"Sexta-feira",
+		"Sábado",
+	}
+	weekday := weekdays[tableItem.Date.Weekday()]
+	item := Item{
+		tableItem,
+		date,
+		weekday,
+	}
+	return item
+}
+
+func (c DayController) UpdateDayHabits(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+		return
+	}
+
+	idStr := r.PathValue("ID")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Id deve ser um número inteiro", http.StatusForbidden)
+		return
+	}
+
+	dayHabitsStr := r.Form["day-habits"]
+	dayHabits := []uint{}
+	for _, dayHabitStr := range dayHabitsStr {
+		dayHabit, err := strconv.Atoi(dayHabitStr)
+		if err == nil {
+			dayHabits = append(dayHabits, uint(dayHabit))
+		}
+	}
+
+	errUpdating := c.dayModel.UpdateDayHabits(uint(id), dayHabits)
+	if errUpdating != nil {
+		http.Error(w, "Erro ao atualizar os hábitos", 400)
+		return
+	}
+
+	table := c.dayModel.GetTable()
+	today := table.GetByDate(time.Now())
+	item := c.formatItem(today)
+	c.tmpls.ExecuteTemplate(w, "table-item", item)
 }

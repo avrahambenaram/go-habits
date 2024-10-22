@@ -28,6 +28,15 @@ func (c *Table) Add(item TableItem) {
 	*c = append(*c, item)
 }
 
+func (c Table) GetByDate(date time.Time) TableItem {
+	for _, item := range c {
+		if item.Date.Year() == date.Year() && item.Date.Month() == date.Month() && item.Date.Day() == date.Day() {
+			return item
+		}
+	}
+	return TableItem{}
+}
+
 func (c *DayModel) FindById(dayID int) (entity.Day, error) {
 	day := entity.Day{}
 	DB.Where("ID = ?", dayID).Find(&day)
@@ -109,4 +118,31 @@ func (c DayModel) GetTable() Table {
 		})
 	}
 	return table
+}
+
+func (c *DayModel) UpdateDayHabits(dayID uint, habitsID []uint) error {
+	day := entity.Day{}
+	DB.Where("ID = ?", dayID).Find(&day)
+	if day.Date.Year() == 1 {
+		return errors.New("Dia não encontrado")
+	}
+	now := time.Now()
+	if day.Date.Year() != now.Year() || day.Date.Month() != now.Month() || day.Date.Day() != now.Day() {
+		return errors.New("Você não pode editar este dia")
+	}
+	DB.Where("day_id = ?", day.ID).Delete(&entity.DayHabit{})
+	for _, habitID := range habitsID {
+		habit := entity.Habit{}
+		DB.Where("ID = ?", habitID).Find(&habit)
+		if habit.Title == "" {
+			break
+		}
+
+		dayHabit := entity.DayHabit{
+			DayID:   day.ID,
+			HabitID: habitID,
+		}
+		DB.Create(&dayHabit)
+	}
+	return nil
 }
